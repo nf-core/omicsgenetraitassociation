@@ -1,22 +1,24 @@
-# nf-core/multiomicintegration: Contributing Guidelines
+# nf-core/omicsgenetraitassociation: Contributing Guidelines
 
 Hi there!
-Many thanks for taking an interest in improving nf-core/multiomicintegration.
+Many thanks for taking an interest in improving nf-core/omicsgenetraitassociation.
 
-We try to manage the required tasks for nf-core/multiomicintegration using GitHub issues, you probably came to this page when creating one.
+We try to manage the required tasks for nf-core/omicsgenetraitassociation using GitHub issues, you probably came to this page when creating one.
 Please use the pre-filled template to save time.
 
 However, don't be put off by this template - other more general issues and suggestions are welcome!
 Contributions to the code are even more welcome ;)
 
-> If you need help using or modifying nf-core/multiomicintegration then the best place to ask is on the nf-core Slack [#multiomicintegration](https://nfcore.slack.com/channels/multiomicintegration) channel ([join our Slack here](https://nf-co.re/join/slack)).
+:::info
+If you need help using or modifying nf-core/omicsgenetraitassociation then the best place to ask is on the nf-core Slack [#omicsgenetraitassociation](https://nfcore.slack.com/channels/omicsgenetraitassociation) channel ([join our Slack here](https://nf-co.re/join/slack)).
+:::
 
 ## Contribution workflow
 
-If you'd like to write some code for nf-core/multiomicintegration, the standard workflow is as follows:
+If you'd like to write some code for nf-core/omicsgenetraitassociation, the standard workflow is as follows:
 
-1. Check that there isn't already an issue about your idea in the [nf-core/multiomicintegration issues](https://github.com/nf-core/multiomicintegration/issues) to avoid duplicating work. If there isn't one already, please create one so that others know you're working on this
-2. [Fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) the [nf-core/multiomicintegration repository](https://github.com/nf-core/multiomicintegration) to your GitHub account
+1. Check that there isn't already an issue about your idea in the [nf-core/omicsgenetraitassociation issues](https://github.com/nf-core/omicsgenetraitassociation/issues) to avoid duplicating work. If there isn't one already, please create one so that others know you're working on this
+2. [Fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) the [nf-core/omicsgenetraitassociation repository](https://github.com/nf-core/omicsgenetraitassociation) to your GitHub account
 3. Make the necessary changes / additions within your forked repository following [Pipeline conventions](#pipeline-contribution-conventions)
 4. Use `nf-core schema build` and add any new parameters to the pipeline JSON schema (requires [nf-core tools](https://github.com/nf-core/tools) >= 1.10).
 5. Submit a Pull Request against the `dev` branch and wait for the code to be reviewed and merged
@@ -24,6 +26,9 @@ If you'd like to write some code for nf-core/multiomicintegration, the standard 
 If you're not used to this workflow with git, you can start with some [docs from GitHub](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests) or even their [excellent `git` resources](https://try.github.io/).
 
 ## Tests
+
+You can optionally test your changes by running the pipeline locally. Then it is recommended to use the `debug` profile to
+receive warnings about process selectors and other debug info. Example: `nextflow run . -profile debug,test,docker --outdir <OUTDIR>`.
 
 When you create a pull request with changes, [GitHub Actions](https://github.com/features/actions) will run automatic tests.
 Typically, pull-requests are only fully reviewed when these tests are passing, though of course we can help out before then.
@@ -54,11 +59,11 @@ These tests are run both with the latest available version of `Nextflow` and als
 
 ## Getting help
 
-For further information/help, please consult the [nf-core/multiomicintegration documentation](https://nf-co.re/multiomicintegration/usage) and don't hesitate to get in touch on the nf-core Slack [#multiomicintegration](https://nfcore.slack.com/channels/multiomicintegration) channel ([join our Slack here](https://nf-co.re/join/slack)).
+For further information/help, please consult the [nf-core/omicsgenetraitassociation documentation](https://nf-co.re/omicsgenetraitassociation/usage) and don't hesitate to get in touch on the nf-core Slack [#omicsgenetraitassociation](https://nfcore.slack.com/channels/omicsgenetraitassociation) channel ([join our Slack here](https://nf-co.re/join/slack)).
 
 ## Pipeline contribution conventions
 
-To make the nf-core/multiomicintegration code and processing logic more understandable for new contributors and to ensure quality, we semi-standardise the way the code and other contributions are written.
+To make the nf-core/omicsgenetraitassociation code and processing logic more understandable for new contributors and to ensure quality, we semi-standardise the way the code and other contributions are written.
 
 ### Adding a new step
 
@@ -108,7 +113,7 @@ This repo includes a devcontainer configuration which will create a GitHub Codes
 
 To get started:
 
-- Open the repo in [Codespaces](https://github.com/nf-core/multiomicintegration/codespaces)
+- Open the repo in [Codespaces](https://github.com/nf-core/omicsgenetraitassociation/codespaces)
 - Tools installed
   - nf-core
   - Nextflow
@@ -116,4 +121,3 @@ To get started:
 Devcontainer specs:
 
 - [DevContainer config](.devcontainer/devcontainer.json)
-- [Dockerfile](.devcontainer/Dockerfile)
