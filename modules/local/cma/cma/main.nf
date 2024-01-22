@@ -17,6 +17,9 @@ process CMA {
     path("tetrachor_sigma.txt"), emit: tetrachor
     path("versions.yml"), emit: versions
 
+    when:
+    task.ext.when == null || task.ext.when
+
     script:
     def args = task.ext.args ?: ''
     def output_dir = category ? "${trait}/${category}/" : "${trait}/"
