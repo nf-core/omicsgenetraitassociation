@@ -15,7 +15,7 @@ process PASCAL {
     output:
     path("${output_file}"), emit: tsv
     path("${manhattan_plot_file}"), emit: manhattan
-    path("versions.yml"), emit: versions.yml
+    path("versions.yml"), emit: versions
 
     when:
     task.ext.when == null || task.ext.when

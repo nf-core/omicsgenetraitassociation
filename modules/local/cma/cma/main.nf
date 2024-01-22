@@ -15,7 +15,7 @@ process CMA {
     val(category), emit: category
     path("CMA_meta.csv"), emit: pval
     path("tetrachor_sigma.txt"), emit: tetrachor
-    path("versions.yml"), emit: versions.yml
+    path("versions.yml"), emit: versions
 
     script:
     def args = task.ext.args ?: ''
