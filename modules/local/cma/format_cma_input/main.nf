@@ -2,6 +2,7 @@ process FORMAT_CMA_INPUT {
 
     label 'process_medium'
 
+    // include an image docker/singularity from biocontainers
     conda "${moduleDir}/environment.yml"
 
     input:
