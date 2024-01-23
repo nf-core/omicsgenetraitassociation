@@ -17,7 +17,7 @@
                         "size": "Large",
                         "weight": "Bolder",
                         "color": "<% if (success) { %>Good<% } else { %>Attention<%} %>",
-                        "text": "nf-core/multiomicintegration v${version} - ${runName}",
+                        "text": "nf-core/omicsgenetraitassociation v${version} - ${runName}",
                         "wrap": true
                     },
                     {

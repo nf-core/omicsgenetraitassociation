@@ -4,15 +4,15 @@
   |\\ | |__  __ /  ` /  \\ |__) |__         }  {
   | \\| |       \\__, \\__/ |  \\ |___     \\`-._,-`-,
                                         `._,._,'
-  nf-core/multiomicintegration v${version}
+  nf-core/omicsgenetraitassociation v${version}
 ----------------------------------------------------
 Run Name: $runName
 
 <% if (success){
-    out << "## nf-core/multiomicintegration execution completed successfully! ##"
+    out << "## nf-core/omicsgenetraitassociation execution completed successfully! ##"
 } else {
     out << """####################################################
-## nf-core/multiomicintegration execution completed unsuccessfully! ##
+## nf-core/omicsgenetraitassociation execution completed unsuccessfully! ##
 ####################################################
 The exit status of the task that caused the workflow execution to fail was: $exitStatus.
 The full error message was:
@@ -35,5 +35,5 @@ Pipeline Configuration:
 <% out << summary.collect{ k,v -> " - $k: $v" }.join("\n") %>
 
 --
-nf-core/multiomicintegration
-https://github.com/nf-core/multiomicintegration
+nf-core/omicsgenetraitassociation
+https://github.com/nf-core/omicsgenetraitassociation

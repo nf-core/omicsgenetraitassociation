@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/multiomicintegration/master/assets/schema_input.json",
-    "title": "nf-core/multiomicintegration pipeline - params.input schema",
+    "$id": "https://raw.githubusercontent.com/nf-core/omicsgenetraitassociation/master/assets/schema_input.json",
+    "title": "nf-core/omicsgenetraitassociation pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
     "type": "array",
     "items": {
