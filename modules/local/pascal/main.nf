@@ -3,7 +3,7 @@ process PASCAL {
 
     container 'docker://jungwooseok/pascal:1.0.3'
 
-    publishDir "results/pascal", mode:'copy', saveAs: { filename  -> filename.endsWith(".csv") ? "PASCAL.csv" : filename}
+    // publishDir "results/pascal", mode:'copy', saveAs: { filename  -> filename.endsWith(".csv") ? "PASCAL.csv" : filename}
 
     input:
     path gwas_file
