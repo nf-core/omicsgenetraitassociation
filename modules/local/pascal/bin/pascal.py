@@ -17,7 +17,7 @@ def pascal(gwas_file, manhattan_plot_file, gene_annotation, ref_panel, output_fi
 
     #Load reference panel        
     Scorer.load_refpanel(ref_panel, qualityT = None, parallel = 1, keepfile=None)
-    #Scorer.load_refpanel(ref_panel, qualityT = None, parallel = 1, keepfile=None, chrlist=[22]) ## TESTING:: CHR22 ONLY FOR TESTING
+    # Scorer.load_refpanel(ref_panel, qualityT = None, parallel = 1, keepfile=None, chrlist=[1]) ## TESTING:: CHR22 ONLY FOR TESTING
     print("Done importing reference panel")
 
     # import and load genome annotation
@@ -52,18 +52,7 @@ if __name__ == "__main__":
     parser.add_argument('--output_file')
 
     args = parser.parse_args()
-    #print(args)
     pascal(gwas_file = args.gwas_file, manhattan_plot_file = args.manhattan_plot_file, gene_annotation = args.gene_annotation, ref_panel = args.ref_panel, output_file = args.output_file) 
-
-    ## test
-    #output_file = args.gwas_file
-    #manhattan_plot_file = os.path.splitext(args.gwas_file)[0] + "_mp.png"
-    # print(args.output_file)
-    # print(args.manhattan_plot_file)
-    # with open(args.output_file, "w") as f:
-    #   f.write("this is the output file")
-    # with open(args.manhattan_plot_file, "w") as f:
-    #   f.write("this is the manhattan plot file")
 
     print("done")
     

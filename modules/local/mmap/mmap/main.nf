@@ -10,7 +10,6 @@ process MMAP {
     path phenotype_file 
     path pedigree_file
     path covariance_matrix_file
-    val output_dir
 
     output:
     path "*.poly.cov.csv"         , emit: csv
