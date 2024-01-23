@@ -14,7 +14,7 @@ process FORMAT_CMA_INPUT {
 
     output:
     path "${name}.csv", emit: csv
-    path("versions.yml"), emit: versions.yml
+    path("versions.yml"), emit: versions
 
     when:
     task.ext.when == null || task.ext.when
