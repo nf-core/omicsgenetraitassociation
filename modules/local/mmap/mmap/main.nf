@@ -7,13 +7,14 @@ process MMAP {
     input:
     val gene
     val trait
-    path phenotype_file 
+    tuple val(meta), path(phenotype_file)
     path pedigree_file
     path covariance_matrix_file
 
     output:
+    // TODO: propagate meta
     path "*.poly.cov.csv"         , emit: csv
-    path "versions.yml"           , emit: versions
+    path "versions.yml"                       , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
