@@ -235,7 +235,7 @@ workflow OMICSGENETRAITASSOCIATION {
         cache: false,
         keepHeader: true,
         skip: 1,
-        storeDir: "${params.outdir}/MEA/"
+        storeDir: "${params.outdir}/mea/"
       )
       // .view()
 }
