@@ -4,16 +4,16 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-// include { paramsSummaryLog; paramsSummaryMap } from 'plugin/nf-validation'
+include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet } from 'plugin/nf-validation'
 
-// def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
-// def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
-// def summary_params = paramsSummaryMap(workflow)
+def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
+def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
+def summary_params = paramsSummaryMap(workflow)
 
-// // Print parameter summary log to screen
-// log.info logo + paramsSummaryLog(workflow) + citation
+// Print parameter summary log to screen
+log.info logo + paramsSummaryLog(workflow) + citation
 
-// WorkflowOmicsgenetraitassociation.initialise(params, log)
+WorkflowOmicsgenetraitassociation.initialise(params, log)
 
 // /*
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -35,18 +35,21 @@
 //
 // MODULES: local modules
 //
-// include { PASCAL } from '../modules/local/pascal'
+include { PASCAL }                      from '../modules/local/pascal'
+include { MMAP }                        from '../modules/local/mmap/mmap'    
+include { MMAP_PARSE }                  from '../modules/local/mmap/mmap_parse'
 include { PREPROCESS_PASCAL }           from '../modules/local/mea/preprocess'
 include { RUN_PASCAL }                  from '../modules/local/mea/pascal'
 include { POSTPROCESS_PASCAL }          from '../modules/local/mea/postprocess'
 include { GO_ANALYSIS }                 from '../modules/local/mea/go_analysis'
 include { MERGE_ORA_AND_SUMMARY }       from '../modules/local/mea/merge_ora_and_summary'
-include { MERGE_SUMMARY_PIECES }        from '../modules/local/mea/merge_summary_pieces'
 
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { INPUT_CHECK }                 from '../subworkflows/local/input_check'
+// include { INPUT_CHECK }                 from '../subworkflows/local/input_check'
+include { PASCAL_SUBWORKFLOW }          from '../subworkflows/local/pascal' 
+include { MMAP_SUBWORKFLOW }            from '../subworkflows/local/mmap'
 include { CMA_SUBWORKFLOW }             from '../subworkflows/local/cma'
 
 /*
@@ -58,9 +61,9 @@ include { CMA_SUBWORKFLOW }             from '../subworkflows/local/cma'
 //
 // MODULE: Installed directly from nf-core/modules
 //
-include { FASTQC                      } from '../modules/nf-core/fastqc/main'
-include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
-include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
+// include { FASTQC                      } from '../modules/nf-core/fastqc/main'
+// include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
+// include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -69,7 +72,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoft
 */
 
 // Info required for completion email and summary
-def multiqc_report = []
+// def multiqc_report = []
 
 workflow OMICSGENETRAITASSOCIATION {
 
@@ -77,9 +80,64 @@ workflow OMICSGENETRAITASSOCIATION {
     ch_mea_preprocess_input = Channel.empty()
 
     //
+    // Validate and parse samplesheet
+    //
+    // TODO: deal with additional sources
+    Channel.fromSamplesheet("input")
+        .multiMap{ sample, trait, pascal, twas, additional_sources ->
+            def num_additional_sources = 0
+            if (additional_sources) {
+                num_additional_sources = additional_sources.countLines()
+            }
+            def meta = ["id": sample, "trait": trait]
+            pascal: [meta, pascal]
+            twas: [meta, twas]
+            num_additional_sources: [meta, num_additional_sources]
+        }
+        .set { ch_input }
+    // ch_input.pascal.view()
+    // ch_input.twas.view()
+    // ch_input.num_additional_sources.view()
+
+
+    //
+    // MODULE: PASCAL
+    //
+    PASCAL_SUBWORKFLOW (
+      ch_input.pascal,
+      params.pascal_gene_annotation,
+      params.pascal_ref_panel
+    )
+    ch_pascal_output = PASCAL_SUBWORKFLOW.out.pascal_output
+    ch_pascal_cma_format = PASCAL_SUBWORKFLOW.out.cma_format_output
+    ch_versions = ch_versions.mix(PASCAL_SUBWORKFLOW.out.versions)
+
+    // ch_pascal_output.view()
+
+    //
+    // SUBWORKFLOW: MMAP_SUBWORKFLOW
+    //
+    MMAP_SUBWORKFLOW (
+      params.mmap_gene_list,
+      params.trait,
+      ch_input.twas,
+      params.mmap_pedigree_file,
+      params.mmap_cov_matrix_file
+    )
+    ch_mmap_parsed = MMAP_SUBWORKFLOW.out.parsed_mmap_output
+    ch_mmap_cma_format = MMAP_SUBWORKFLOW.out.cma_format_output
+    ch_versions = ch_versions.mix(MMAP_SUBWORKFLOW.out.versions)
+
+    //
     // MODULE: run CMA
     //
-    ch_cma_input_files = Channel.fromPath("${params.cma_two_traits}/*.csv").toList()
+
+    // ch_pascal_cma_format.view()
+    // ch_mmap_cma_format.view()
+
+    ch_cma_input_files = ch_pascal_cma_format
+      .mix(ch_mmap_cma_format)
+      .toList()
 
     CMA_SUBWORKFLOW (
       ch_cma_input_files,
@@ -91,7 +149,7 @@ workflow OMICSGENETRAITASSOCIATION {
     ch_versions = ch_versions.mix(CMA_SUBWORKFLOW.out.versions)
 
     //
-    // MODULE: REPROCESSFORPASCAL 
+    // MODULE: PREPROCESSFORPASCAL 
     //
     ch_mea_preprocess_input = ch_pval
       .multiMap{ pval ->
@@ -103,8 +161,6 @@ workflow OMICSGENETRAITASSOCIATION {
       .map { module_file ->
         tuple ( module_file.baseName, module_file)
       }
-    
-    // ch_module_files.view()
 
     ch_preprocess_input = ch_mea_preprocess_input.gene_score_file
       .combine(ch_module_files)
@@ -121,10 +177,6 @@ workflow OMICSGENETRAITASSOCIATION {
     ch_mea_paths = PREPROCESS_PASCAL.out.paths
     ch_mea_meta = PREPROCESS_PASCAL.out.meta
     ch_versions = ch_versions.mix(PREPROCESS_PASCAL.out.versions)
-
-    // ch_mea_paths.view()
-    // ch_mea_meta.view()
-    // ch_versions.view()
 
     //
     // MODULE: MEA PASCAL
@@ -175,7 +227,7 @@ workflow OMICSGENETRAITASSOCIATION {
     ch_merge_meta = MERGE_ORA_AND_SUMMARY.out.meta
     ch_merge_trait = MERGE_ORA_AND_SUMMARY.out.trait
 
-    ch_merge_summary_files.collect().view()
+    // ch_merge_summary_files.collect().view()
 
     // concatenate summary slices and write to master_summary_<trait>.csv
     ch_master_summary = ch_merge_summary_files
@@ -183,22 +235,9 @@ workflow OMICSGENETRAITASSOCIATION {
         cache: false,
         keepHeader: true,
         skip: 1,
-        storeDir: "${params.outdir}/MEA/"
+        storeDir: "${params.outdir}/mea/"
       )
-      .view()
-
-
-    //
-    // SUBWORKFLOW: Read in samplesheet, validate and stage input files
-    //
-    //INPUT_CHECK (
-    //    file(params.input)
-    //)
-    //ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
-    // TODO: OPTIONAL, you can use nf-validation plugin to create an input channel from the samplesheet with Channel.fromSamplesheet("input")
-    // See the documentation https://nextflow-io.github.io/nf-validation/samplesheets/fromSamplesheet/
-    // ! There is currently no tooling to help you write a sample sheet schema
-
+      // .view()
 }
 
 /*

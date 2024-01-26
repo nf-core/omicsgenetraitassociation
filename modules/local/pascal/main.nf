@@ -6,14 +6,14 @@ process PASCAL {
     // publishDir "results/pascal", mode:'copy', saveAs: { filename  -> filename.endsWith(".csv") ? "PASCAL.csv" : filename}
 
     input:
-    path gwas_file
+    tuple val(meta), path(gwas_file)
     path gene_annotation
     path ref_panel
 
     output:
-    path("pascal_out.tsv")        , emit: tsv
-    path("manhattan_plot.png")    , emit: manhattan
-    path("versions.yml")          , emit: versions
+    tuple val(meta), path("pascal_out.tsv")        , emit: tsv
+    path("manhattan_plot.png")                , emit: manhattan
+    path("versions.yml")                      , emit: versions
 
     when:
     task.ext.when == null || task.ext.when

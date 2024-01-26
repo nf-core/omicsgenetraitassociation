@@ -5,73 +5,98 @@
     "description": "A pipeline which integrates multiple omic datastreams and performs coordinated analysis",
     "type": "object",
     "definitions": {
+        "mea_options": {
+            "title": "MEA options",
+            "type": "object",
+            "description": "Parameters to modify MEA behavior",
+            "default": "",
+            "properties": {
+                "gene_col_name": {
+                    "type": "string",
+                    "default": "markname",
+                    "description": "Column name for gene ID/names"
+                },
+                "pval_col_name": {
+                    "type": "string",
+                    "default": "meta_p",
+                    "description": "Column name for p-values"
+                },
+                "numtests": {
+                    "type": "integer",
+                    "default": 17551,
+                    "description": "Number of tests for multiple testing"
+                },
+                "alpha": {
+                    "type": "number",
+                    "default": 0.05,
+                    "description": "P-value threshold alpha value"
+                }
+            }
+        },
+        "mmap_options": {
+            "title": "MMAP options",
+            "type": "object",
+            "description": "Parameters to modify MMAP behavior",
+            "default": "",
+            "properties": {
+                "mmap_header": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Whether MMAP output has a header or not"
+                },
+                "mmap_pval_col": {
+                    "type": "string",
+                    "default": "p_vals",
+                    "description": "Column name or number for p-values"
+                },
+                "mmap_beta_col": {
+                    "type": "string",
+                    "default": "betas_genes",
+                    "description": "Column name or number for Beta values"
+                },
+                "mmap_se_genes": {
+                    "type": "string",
+                    "default": "se_genes",
+                    "description": "Column name or number for SE values"
+                }
+            }
+        },
+        "pascal_options": {
+            "title": "PASCAL options",
+            "type": "object",
+            "description": "Parameters to modify PASCAL behavior",
+            "default": "",
+            "properties": {
+                "pascal_header": {
+                    "type": "integer",
+                    "default": 0,
+                    "description": "Whether PASCAL output has a header or not"
+                },
+                "pascal_pval_col": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Column name or number for p-values"
+                }
+            }
+        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["input", "outdir"],
             "properties": {
                 "input": {
                     "type": "string",
-                    "format": "file-path",
-                    "exists": true,
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
-                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/omicsgenetraitassociation/usage#samplesheet-input).",
-                    "fa_icon": "fas fa-file-csv"
+                    "description": "path to samplesheet",
+                    "schema": "assets/schema_input.json"
                 },
                 "outdir": {
                     "type": "string",
-                    "format": "directory-path",
-                    "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-                    "fa_icon": "fas fa-folder-open"
-                },
-                "email": {
-                    "type": "string",
-                    "description": "Email address for completion summary.",
-                    "fa_icon": "fas fa-envelope",
-                    "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
-                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
-                },
-                "multiqc_title": {
-                    "type": "string",
-                    "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
-                    "fa_icon": "fas fa-file-signature"
+                    "default": "results",
+                    "description": "output directory"
                 }
-            }
-        },
-        "reference_genome_options": {
-            "title": "Reference genome options",
-            "type": "object",
-            "fa_icon": "fas fa-dna",
-            "description": "Reference genome related files and options required for the workflow.",
-            "properties": {
-                "genome": {
-                    "type": "string",
-                    "description": "Name of iGenomes reference.",
-                    "fa_icon": "fas fa-book",
-                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
-                },
-                "fasta": {
-                    "type": "string",
-                    "format": "file-path",
-                    "exists": true,
-                    "mimetype": "text/plain",
-                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
-                    "description": "Path to FASTA genome file.",
-                    "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
-                    "fa_icon": "far fa-file-code"
-                },
-                "igenomes_ignore": {
-                    "type": "boolean",
-                    "description": "Do not load the iGenomes reference config.",
-                    "fa_icon": "fas fa-ban",
-                    "hidden": true,
-                    "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
-                }
-            }
+            },
+            "required": ["input"]
         },
         "institutional_config_options": {
             "title": "Institutional config options",
@@ -198,14 +223,6 @@
                     "fa_icon": "fas fa-remove-format",
                     "hidden": true
                 },
-                "max_multiqc_email_size": {
-                    "type": "string",
-                    "description": "File size limit when attaching MultiQC reports to summary emails.",
-                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
-                    "default": "25.MB",
-                    "fa_icon": "fas fa-file-upload",
-                    "hidden": true
-                },
                 "monochrome_logs": {
                     "type": "boolean",
                     "description": "Do not use coloured log outputs.",
@@ -218,24 +235,6 @@
                     "fa_icon": "fas fa-people-group",
                     "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
                     "hidden": true
-                },
-                "multiqc_config": {
-                    "type": "string",
-                    "format": "file-path",
-                    "description": "Custom config file to supply to MultiQC.",
-                    "fa_icon": "fas fa-cog",
-                    "hidden": true
-                },
-                "multiqc_logo": {
-                    "type": "string",
-                    "description": "Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file",
-                    "fa_icon": "fas fa-image",
-                    "hidden": true
-                },
-                "multiqc_methods_description": {
-                    "type": "string",
-                    "description": "Custom MultiQC yaml file containing HTML including a methods description.",
-                    "fa_icon": "fas fa-cog"
                 },
                 "validate_params": {
                     "type": "boolean",
@@ -270,10 +269,16 @@
     },
     "allOf": [
         {
-            "$ref": "#/definitions/input_output_options"
+            "$ref": "#/definitions/mea_options"
         },
         {
-            "$ref": "#/definitions/reference_genome_options"
+            "$ref": "#/definitions/mmap_options"
+        },
+        {
+            "$ref": "#/definitions/pascal_options"
+        },
+        {
+            "$ref": "#/definitions/input_output_options"
         },
         {
             "$ref": "#/definitions/institutional_config_options"
@@ -284,5 +289,10 @@
         {
             "$ref": "#/definitions/generic_options"
         }
-    ]
+    ],
+    "properties": {
+        "email": {
+            "type": "string"
+        }
+    }
 }

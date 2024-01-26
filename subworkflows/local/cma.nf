@@ -16,6 +16,10 @@ workflow CMA_SUBWORKFLOW {
     ch_pval = Channel.empty()
     ch_tetrachor = Channel.empty()
 
+    if (params.cma_test) {
+      input_files = Channel.fromPath("${params.cma_two_traits}/*.csv").toList()
+    }
+
     // CMA
     CMA (
       input_files,

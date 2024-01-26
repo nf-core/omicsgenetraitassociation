@@ -2,7 +2,8 @@ process GO_ANALYSIS {
 
     label 'process_low'
 
-    container 'docker://jungwooseok/webgestalt:1.0.0'
+    container 'docker://jungwooseok/webgestalt:1.0.3'
+    // TODO: requested BioContainers
 
     input:
     tuple val(module_id), path(masterSummarySlice), path(sigModuleDir), path(goFile)

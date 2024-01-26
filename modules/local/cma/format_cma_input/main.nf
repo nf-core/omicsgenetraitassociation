@@ -4,6 +4,9 @@ process FORMAT_CMA_INPUT {
 
     // include an image docker/singularity from biocontainers
     conda "${moduleDir}/environment.yml"
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/pandas:1.1.5' :
+        'quay.io/biocontainers/pandas:1.1.5' }"
 
     input:
     path input_file

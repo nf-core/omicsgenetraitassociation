@@ -3,6 +3,9 @@ process MMAP_PARSE {
     label 'process_low'
 
     conda "${moduleDir}/environment.yml"
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/mulled-v2-344874846f44224e5f0b7b741eacdddffe895d1e:d3fff24ee1297b4c3bcef48354c2a30f0c82007a-0' :
+        'biocontainers/mulled-v2-344874846f44224e5f0b7b741eacdddffe895d1e:d3fff24ee1297b4c3bcef48354c2a30f0c82007a-0' }"
 
     input:
     path output_MMAP

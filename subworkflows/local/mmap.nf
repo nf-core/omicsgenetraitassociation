@@ -24,16 +24,18 @@ workflow MMAP_SUBWORKFLOW {
     //
     // MODULE: MMAP
     //
+    // TODO: add gene to meta field
     MMAP (
-      ch_mmap_genes, trait, phenotype_file, pedigree_file, covariance_matrix_file
+      ch_mmap_genes, trait, phenotype_file.first(), pedigree_file, covariance_matrix_file
     )
     ch_concatenated_mmap = MMAP.out.csv
-      .collectFile(name: 'mmap_results.csv', cache:false)
+      .collectFile(name: 'mmap_results.csv', cache:false) 
     ch_versions = ch_versions.mix(MMAP.out.versions)
 
     //
     // MODULE: MMAP PARSE
     //
+    // TODO: propagate meta
     MMAP_PARSE (
       ch_concatenated_mmap
     )
@@ -43,6 +45,7 @@ workflow MMAP_SUBWORKFLOW {
     //
     // MODULE: FORMAT_CMA_INPUT
     //
+    // TODO: propagate meta
     FORMAT_CMA_INPUT (
       ch_mmap_parsed,
       "MMAP",

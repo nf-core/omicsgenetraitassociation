@@ -9,9 +9,9 @@
 ## change FIELDS to desired name, method, database, gene id format, input folder, and gene universe folder
 ## data on the terms with significant overlap will be in SUMMARIES_PATH if such terms exist
 
+
 library("WebGestaltR")
-library(stringr)
-# library(optparse)
+
 
 # read in nextflow parameters
 oraSummaryDir <- file.path("GO_summaries", '$trait')

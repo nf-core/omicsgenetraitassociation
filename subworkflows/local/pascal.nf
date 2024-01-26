@@ -18,6 +18,7 @@ workflow PASCAL_SUBWORKFLOW {
       gwas_file, gene_annotation, ref_panel
     )
     ch_pascal_out = PASCAL.out.tsv
+      .map { meta, file -> file}
     ch_versions = ch_versions.mix(PASCAL.out.versions)
 
     FORMAT_CMA_INPUT (
