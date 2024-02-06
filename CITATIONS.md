@@ -1,4 +1,4 @@
-# nf-core/multiomicintegration: Citations
+# nf-core/omicsgenetraitassociation: Citations
 
 ## [nf-core](https://pubmed.ncbi.nlm.nih.gov/32055031/)
 
