@@ -10,7 +10,7 @@
 
 ## Pipeline tools
 
-- [CMA](https://doi.org/10.1142/9789814447973_0023)
+- [corrmeta](https://doi.org/10.1142/9789814447973_0023)
 
   > Province MA. Meta-analyses of correlated genomic scans. Genet Epidemiol. 2005;29:274,#137.
 
