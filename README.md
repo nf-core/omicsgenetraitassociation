@@ -44,9 +44,9 @@ Now, you can run the pipeline using:
 
 ```bash
 nextflow run nf-core/omicsgenetraitassociation \
-   -profile <docker/singularity/.../institute> \
-   --input samplesheet.csv \
-   --outdir <OUTDIR>
+  -profile <docker/singularity/.../institute> \
+  --input samplesheet.csv \
+  --outdir <OUTDIR>
 ```
 
 > [!WARNING]

@@ -9,7 +9,7 @@ def generate_statistics(output_MMAP):
 
     # read unparsed MMAP output file
     output_file = pd.read_csv(output_MMAP, header = None)
-    
+
     #extract relevant columns and rows from the unparsed file
     output_file_pval_genes = output_file[[4,5,6,22,23,24]]
     output_file_gene_names_to_parse = output_file_pval_genes[output_file_pval_genes[4] == "h2"]
@@ -46,10 +46,10 @@ def generate_statistics(output_MMAP):
 
     #write the new dataframe/parsed mmap output to the output path
     file_identifier = output_MMAP.split("/")[len(output_MMAP.split("/")) - 1].split(".")[0]
-    parsed_output.to_csv(f"parsed_output_{str(file_identifier)}.csv", index = None) 
+    parsed_output.to_csv(f"parsed_output_{str(file_identifier)}.csv", index = None)
 
 if __name__ == "__main__":
-    from argparse import ArgumentParser   
+    from argparse import ArgumentParser
     parser = ArgumentParser()
     parser.add_argument('--output_MMAP', '-output_MMAP', help='aggregated and unparsed MMAP output for different individual gene models')
     args = parser.parse_args()

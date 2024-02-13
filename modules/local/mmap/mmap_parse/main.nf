@@ -21,7 +21,7 @@ process MMAP_PARSE {
     def args = task.ext.args ?: ''
     """
     python3 ${moduleDir}/bin/parse_MMAP_output.py \\
-      --output_MMAP ${output_MMAP}
+        --output_MMAP ${output_MMAP}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

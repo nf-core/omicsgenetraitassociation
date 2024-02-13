@@ -15,19 +15,19 @@ workflow PASCAL_SUBWORKFLOW {
     ch_pascal_out           = Channel.empty()
 
     PASCAL (
-      gwas_file, gene_annotation, ref_panel
+        gwas_file, gene_annotation, ref_panel
     )
     ch_pascal_out = PASCAL.out.tsv
-      .map { meta, file -> file}
+        .map { meta, file -> file}
     ch_versions = ch_versions.mix(PASCAL.out.versions)
 
     FORMAT_CMA_INPUT (
-      ch_pascal_out,
-      "PASCAL",
-      params.pascal_header,
-      params.pascal_pval_col,
-      [],
-      []
+        ch_pascal_out,
+        "PASCAL",
+        params.pascal_header,
+        params.pascal_pval_col,
+        [],
+        []
     )
     ch_pascal_cma_format = FORMAT_CMA_INPUT.out.csv
     ch_versions = ch_versions.mix(FORMAT_CMA_INPUT.out.versions)

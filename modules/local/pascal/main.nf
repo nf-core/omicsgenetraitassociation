@@ -32,11 +32,11 @@ process PASCAL {
     tar -xzvf ${ref_panel}
 
     python3 ${moduleDir}/bin/pascal.py \\
-      --gwas_file $gwas_file \\
-      --gene_annotation $gene_annotation \\
-      --ref_panel $ref_panel_name \\
-      --manhattan_plot_file manhattan_plot.png \\
-      --output_file pascal_out.tsv
+        --gwas_file $gwas_file \\
+        --gene_annotation $gene_annotation \\
+        --ref_panel $ref_panel_name \\
+        --manhattan_plot_file manhattan_plot.png \\
+        --output_file pascal_out.tsv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

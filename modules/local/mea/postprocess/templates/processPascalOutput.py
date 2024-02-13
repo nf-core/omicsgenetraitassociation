@@ -10,7 +10,7 @@ from statsmodels.sandbox.stats.multicomp import multipletests
 
 def extractGenesBasedOnPval(DIRPATH:str, pval:float):
     """
-    Given a GeneScore file in tsv file format without header and a pvalue threshold, 
+    Given a GeneScore file in tsv file format without header and a pvalue threshold,
     output list of genes with pval less than the threshold
 
     Args:
@@ -61,8 +61,8 @@ def recordModulesFromPascalResult(result, OUTPUTPATH, sigGenesList, almostSigGen
             if gene in sig3GenesList:
                 sig3Genes.append(gene)
             if gene in sig2GenesList:
-                sig2Genes.append(gene)        
-                
+                sig2Genes.append(gene)
+
         # assumes index of 2 represents bool indicating significance of the module
         if item[2]:
             moduleIndexToSigFlag[item[0]] = True
@@ -124,17 +124,17 @@ def processOnePascalOutput(DIRPATH:str, alpha:float, outputPATH:str):
             pathwayIndexList.append(module_idx)
             pathwayGenesList.append(module_genes)
             pathwayPvalList.append(module_pval)
-        
+
     # FDR correction BH or Bonferroni
     correctedPathwayPvalList = multipletests(pathwayPvalList, alpha, method='bonferroni') #Bonferroni
-      
-    # output csv file 
+
+    # output csv file
     df = pd.DataFrame(list(zip(pathwayIndexList, pathwayGenesList,pathwayPvalList, correctedPathwayPvalList[1])),
-                      columns=['moduleIndex', 'moduleGenes', 'modulePval', 'correctedModulePval'])
+                        columns=['moduleIndex', 'moduleGenes', 'modulePval', 'correctedModulePval'])
     df.to_csv(outputPATH)
-    
+
     result = []
-      
+
     numSigPathway = sum(correctedPathwayPvalList[0])
     for tup in zip(pathwayIndexList, pathwayGenesList, correctedPathwayPvalList[0], correctedPathwayPvalList[1], pathwayPvalList):
         result.append(tup)
@@ -147,13 +147,13 @@ def print_versions():
     import sys
     import statsmodels
     with open("versions.yml", "w") as file:
-      file.write('"${task.process}"\\n')
-      file.write(f'  python: {sys.version}\\n')
-      file.write(f'  pandas: {pd.__version__}\\n')
-      file.write(f'  statsmodels: {statsmodels.__version__}\\n')
+        file.write('"${task.process}"\\n')
+        file.write(f'  python: {sys.version}\\n')
+        file.write(f'  pandas: {pd.__version__}\\n')
+        file.write(f'  statsmodels: {statsmodels.__version__}\\n')
 
 def main():
-    
+
     # parse nextflow input variables
     pascalOutputFile = '$pascalOutputFile'
     alpha = float('$alpha')
@@ -161,14 +161,14 @@ def main():
     geneScoreFilePath = '$geneScoreFilePascalInput'
     significantModulesOutDir = 'significantModules/'
     numTests = int('$numTests')
-    
+
     study = pascalOutputFile.split("_")[0]
     trait = pascalOutputFile.split("_")[1]
     network = pascalOutputFile.split("_")[2].replace(".txt", "")
     rpIndex = trait.split("-")[0]
-    
+
     sigPvalThreshold = 0.05 / numTests
-    
+
     # Check if the output directory exists, if not create it
     if not os.path.exists(outputPath):
         os.makedirs(outputPath)
@@ -191,7 +191,7 @@ def main():
                     'sig3Genes':[],
                     'sig4Genes':[]
                     }
-    
+
     # create summary file for one pascal output file.
     result, numSigPathway = processOnePascalOutput(pascalOutputFile, alpha, os.path.join(outputPath, "pascalResult.csv"))
     sigGenesList = extractGenesBasedOnPval(geneScoreFilePath,sigPvalThreshold)
@@ -218,7 +218,7 @@ def main():
         summary_dict['sig2Genes'].append(sig2GenesDict[moduleIndex])
         summary_dict['sig3Genes'].append(sig3GenesDict[moduleIndex])
         summary_dict['sig4Genes'].append(sig4GenesDict[moduleIndex])
-    
+
     df_summary = pd.DataFrame(summary_dict)
     #df_summary.to_csv(os.path.join(outputPath, f"master_summary_slice_{rpIndex}.csv"), index=False)
     df_summary.to_csv(os.path.join(outputPath, f"master_summary_slice_{trait}_{network}.csv"), index=False)

@@ -15,7 +15,7 @@ def pascal(gwas_file, manhattan_plot_file, gene_annotation, ref_panel, output_fi
     Scorer = genescorer.chi2sum(window=50000, varcutoff=0.99, MAF=0.05, genome=None, gpu=False)
     print("Gene level scoring starts...")
 
-    #Load reference panel        
+    #Load reference panel
     Scorer.load_refpanel(ref_panel, qualityT = None, parallel = 1, keepfile=None)
     # Scorer.load_refpanel(ref_panel, qualityT = None, parallel = 1, keepfile=None, chrlist=[1]) ## TESTING:: CHR22 ONLY FOR TESTING
     print("Done importing reference panel")
@@ -43,7 +43,7 @@ def pascal(gwas_file, manhattan_plot_file, gene_annotation, ref_panel, output_fi
     plt.savefig(manhattan_plot_file)
 
 if __name__ == "__main__":
-    from argparse import ArgumentParser   
+    from argparse import ArgumentParser
     parser = ArgumentParser()
     parser.add_argument('--gwas_file', '-gwas_file', help='gwas')
     parser.add_argument('--manhattan_plot_file')
@@ -52,10 +52,10 @@ if __name__ == "__main__":
     parser.add_argument('--output_file')
 
     args = parser.parse_args()
-    pascal(gwas_file = args.gwas_file, manhattan_plot_file = args.manhattan_plot_file, gene_annotation = args.gene_annotation, ref_panel = args.ref_panel, output_file = args.output_file) 
+    pascal(gwas_file = args.gwas_file, manhattan_plot_file = args.manhattan_plot_file, gene_annotation = args.gene_annotation, ref_panel = args.ref_panel, output_file = args.output_file)
 
     print("done")
-    
-    
+
+
 
 

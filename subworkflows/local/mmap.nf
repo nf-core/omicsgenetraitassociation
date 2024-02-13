@@ -16,9 +16,9 @@ workflow MMAP_SUBWORKFLOW {
     main:
     ch_versions             = Channel.empty()
     ch_concatenated_mmap    = Channel.empty()
-    ch_mmap_genes           = Channel.fromPath(gene_list_file)   
-      .splitText()
-      .map ( gene -> gene.trim() )
+    ch_mmap_genes           = Channel.fromPath(gene_list_file)
+        .splitText()
+        .map ( gene -> gene.trim() )
     ch_mmap_cma_format      = Channel.empty()
 
     //
@@ -26,10 +26,10 @@ workflow MMAP_SUBWORKFLOW {
     //
     // TODO: add gene to meta field
     MMAP (
-      ch_mmap_genes, trait, phenotype_file.first(), pedigree_file, covariance_matrix_file
+        ch_mmap_genes, trait, phenotype_file.first(), pedigree_file, covariance_matrix_file
     )
     ch_concatenated_mmap = MMAP.out.csv
-      .collectFile(name: 'mmap_results.csv', cache:false) 
+        .collectFile(name: 'mmap_results.csv', cache:false)
     ch_versions = ch_versions.mix(MMAP.out.versions)
 
     //
@@ -37,7 +37,7 @@ workflow MMAP_SUBWORKFLOW {
     //
     // TODO: propagate meta
     MMAP_PARSE (
-      ch_concatenated_mmap
+        ch_concatenated_mmap
     )
     ch_mmap_parsed = MMAP_PARSE.out.mmap_parsed_output
     ch_versions = ch_versions.mix(MMAP_PARSE.out.versions)
@@ -47,12 +47,12 @@ workflow MMAP_SUBWORKFLOW {
     //
     // TODO: propagate meta
     FORMAT_CMA_INPUT (
-      ch_mmap_parsed,
-      "MMAP",
-      params.mmap_header,
-      params.mmap_pval_col,
-      params.mmap_beta_col,
-      params.mmap_se_genes
+        ch_mmap_parsed,
+        "MMAP",
+        params.mmap_header,
+        params.mmap_pval_col,
+        params.mmap_beta_col,
+        params.mmap_se_genes
     )
     ch_mmap_cma_format = FORMAT_CMA_INPUT.out.csv
     ch_versions = ch_versions.mix(FORMAT_CMA_INPUT.out.versions)

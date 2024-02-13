@@ -12,11 +12,11 @@ process MERGE_ORA_AND_SUMMARY {
     tuple val(pipeline), val(trait)
 
     output:
-    path("summary/"), emit: summary_dir
-    path("summary/*"), emit: summary_files
-    tuple val(pipeline), val(trait), emit: meta
-    val(trait), emit: trait 
-    path("versions.yml"), emit: versions
+    path("summary/")                , emit: summary_dir
+    path("summary/*")               , emit: summary_files
+    tuple val(pipeline), val(trait) , emit: meta
+    val(trait)                      , emit: trait
+    path("versions.yml")            , emit: versions
 
     when:
     task.ext.when == null || task.ext.when

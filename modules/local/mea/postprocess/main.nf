@@ -3,7 +3,7 @@ process POSTPROCESS_PASCAL {
     label 'process_low'
 
     container 'docker://jungwooseok/mea:1.0.0'
-    // TODO: requested BioContainer 
+    // TODO: requested BioContainer
 
     input:
     tuple val(module_id), path(pascalOutputFile), path(geneScoreFilePascalInput), path(goFile)
