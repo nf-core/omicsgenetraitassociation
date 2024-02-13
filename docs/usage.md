@@ -4,8 +4,7 @@
 
 ## Introduction
 
-<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
-Omicsgenetraitassociation may be peformed for any set of omics which can be analyzed at a common OMIC unit of inference (e.g. genes). 
+Omicsgenetraitassociation may be peformed for any set of omics which can be analyzed at a common OMIC unit of inference (e.g. genes).
 
 ## Samplesheet input
 
@@ -13,10 +12,9 @@ You will need to create a samplesheet with information about the samples you wou
 
 **Note**: Currently, the pipeline supports additional sources of evidence. If not desired, `additional_sources` should simply be left blank.
 
-
 ### Full samplesheet
 
-The pipeline will auto-detect whether a sample contains PASCAL, TWAS, or additional sources of evidence. 
+The pipeline will auto-detect whether a sample contains PASCAL, TWAS, or additional sources of evidence.
 A final samplesheet file consisting of PASCAL, TWAS, and two additional sources of evidence for sample `llfs_fhshdl` and no additional sources of evidence for `fhs_lnTG` would look like so:
 
 ```csv title="samplesheet.csv"
@@ -25,13 +23,13 @@ llfs_fhshdl,fhshdl,data/llfs/fhshdl/gwas.csv,data/llfs/fhshdl/twas.csv,data/llfs
 fhs_lnTG,lnTG,data/fhs/lnTG/gwas.csv,data/fhs/lnTG/twas.csv,
 ```
 
-| Column    | Description                                                                                                                                                                            |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`  | Custom sample name.                                                                                                                                                                    |
-| `trait`   | Trait name.                                                                                                                                                                            |
-| `pascal`  | Full path to GWAS summary statistics. File can either be `.csv` or gzipped `.csv.gz`.                                                                                                  | 
-| `twas`    | Full path to TWAS phenotype file. File must be `.csv` and must contain a column that matches `trait` and gene names for columns.                                                       |
-| `additional_sources`    | Full path to a text file that lists full paths to files with additional omic association p-values in each line.                                                          |
+| Column               | Description                                                                                                                      |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`             | Custom sample name.                                                                                                              |
+| `trait`              | Trait name.                                                                                                                      |
+| `pascal`             | Full path to GWAS summary statistics. File can either be `.csv` or gzipped `.csv.gz`.                                            |
+| `twas`               | Full path to TWAS phenotype file. File must be `.csv` and must contain a column that matches `trait` and gene names for columns. |
+| `additional_sources` | Full path to a text file that lists full paths to files with additional omic association p-values in each line.                  |
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
@@ -145,6 +143,7 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
   - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
 
 **Omicsgenetraitassociation specific profiles**
+
 - `test`
   - A minimal test profile for the full workflow
 

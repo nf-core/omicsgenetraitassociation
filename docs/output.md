@@ -1,7 +1,6 @@
 # nf-core/omicsgenetraitassociation: Output
 
 ## Introduction
-<!-- TODO nf-core: Write this documentation describing your workflow's output -->
 
 This document describes the output produced by the pipeline. Most of the plots are taken from the MultiQC report, which summarises results at the end of the pipeline.
 
@@ -37,15 +36,21 @@ example_results/
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
 1. Prepare gene-level trait-association P-values
-  - [PASCAL](#pascal)
-  - [MMAP](#mmap)
+
+- [PASCAL](#pascal)
+- [MMAP](#mmap)
+
 2. Perform (correlated) Meta-Analysis
-  - [CMA](#cma)
+
+- [CMA](#cma)
+
 3. Enrichment Analyses
-  - [MEA](#mea)
-  - [GOEA](#mea)
+
+- [MEA](#mea)
+- [GOEA](#mea)
 
 ### PASCAL
+
 This step aggregates GWAS summary statistics P-values to gene-level scores using PASCAL which accounts for linkage between markers. It provides aggregated gene-level P-values and a manhattan plot for visualization
 
 <details markdown="1">
@@ -56,6 +61,7 @@ This step aggregates GWAS summary statistics P-values to gene-level scores using
   - `manhattan_plot.png`: manhattan plot
 
 ### MMAP
+
 This step uses MMAP to perform linear mixed model analysis using gene expression as the main predictor and the trait as the outcome variable. It provides a directory of LMM results for each gene as well as a parsed output as a single csv file.
 
 <details markdown="1">
@@ -66,6 +72,7 @@ This step uses MMAP to perform linear mixed model analysis using gene expression
   - `parsed_output_mmap_results.csv`: parsed output file
 
 ### CMA
+
 This step performs correlated meta-analysis using the CMA package. It provides an output file with the meta P-value and a matrix of tetrachoric correlation coefficients.
 
 <details markdown="1">
@@ -76,6 +83,7 @@ This step performs correlated meta-analysis using the CMA package. It provides a
   - `tetrachor_sigma.txt`: tetrachoric correlations between input datasets
 
 ### MEA
+
 This step performs module and gene ontology (GO) enrichment analyses. It provides summaries of each enrichment analysis.
 
 <details markdown="1">
