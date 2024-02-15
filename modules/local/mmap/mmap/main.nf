@@ -2,7 +2,7 @@ process MMAP {
 
     label 'process_low'
 
-    container 'docker://jungwooseok/mmap:1.0.2'
+    container 'jungwooseok/mmap:1.0.2'
 
     input:
     val gene
