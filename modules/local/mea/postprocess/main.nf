@@ -2,7 +2,7 @@ process POSTPROCESS_PASCAL {
 
     label 'process_low'
 
-    container 'docker://jungwooseok/mea:1.0.0'
+    container 'jungwooseok/mea:1.0.0'
     // TODO: requested BioContainer
 
     input:

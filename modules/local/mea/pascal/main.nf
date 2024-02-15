@@ -2,7 +2,7 @@ process RUN_PASCAL {
 
     label 'process_low'
 
-    container 'docker://jungwooseok/mea_pascal:1.1'
+    container 'jungwooseok/mea_pascal:1.1'
 
     input:
     tuple val(module_id), path(geneScoreFile), path(moduleFile), path(goFile)
