@@ -1,7 +1,7 @@
 process PASCAL {
     label 'process_medium'
 
-    container 'docker://jungwooseok/pascal:1.0.3'
+    container 'jungwooseok/pascal:1.0.3'
 
     // publishDir "results/pascal", mode:'copy', saveAs: { filename  -> filename.endsWith(".csv") ? "PASCAL.csv" : filename}
 
