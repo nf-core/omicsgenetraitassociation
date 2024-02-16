@@ -2,7 +2,7 @@ process MERGE_ORA_AND_SUMMARY {
 
     label 'process_low'
 
-    // container 'docker://jungwooseok/mea:1.0.0'
+    conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/pandas:1.1.5' :
         'quay.io/biocontainers/pandas:1.1.5' }"

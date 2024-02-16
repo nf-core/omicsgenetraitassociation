@@ -2,7 +2,6 @@ process FORMAT_CMA_INPUT {
 
     label 'process_medium'
 
-    // include an image docker/singularity from biocontainers
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/pandas:1.1.5' :

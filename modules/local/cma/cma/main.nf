@@ -2,7 +2,7 @@ process CMA {
 
     label 'process_low'
 
-    container 'docker://jungwooseok/cma:1.2.7' // TODO: replace when released on bioconductor
+    container 'jungwooseok/cma:1.2.7' // TODO: replace when released on bioconductor
 
     input:
     path input_files // list of input files to CMA (to accomodate arbitrary number of files)

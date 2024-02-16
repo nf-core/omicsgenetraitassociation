@@ -2,7 +2,7 @@ process GO_ANALYSIS {
 
     label 'process_low'
 
-    container 'docker://jungwooseok/webgestalt:1.0.3'
+    container 'jungwooseok/webgestalt:1.0.3'
     // TODO: requested BioContainers
 
     input:
