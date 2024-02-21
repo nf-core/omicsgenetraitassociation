@@ -8,7 +8,7 @@ In the output directory, of a given run of this pipeline, there will be a subdir
 
 For example, if your samplesheet has two samples, like so:
 
-```raw
+```csv title="samplesheet.csv"
 sample,trait,pascal,twas,additional_sources
 llfs_fhshdl,data/llfs/gwas.csv.gz,data/llfs/twas.csv
 fhs_fhshdl,data/fhs/gwas.csv.gz,data/fhs/twas.csv
