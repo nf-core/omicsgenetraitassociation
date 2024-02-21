@@ -16,7 +16,7 @@ fhs_fhshdl,data/fhs/gwas.csv.gz,data/fhs/twas.csv
 
 Then the output directory would have the following structure:
 
-```raw
+```tree
 example_results/
 ├── llfs_fhshdl
 │   ├── cma/
