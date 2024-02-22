@@ -16,10 +16,10 @@ library("WebGestaltR")
 # read in nextflow parameters
 oraSummaryDir <- file.path("GO_summaries", '$trait')
 opt <- list(
-  sigModuleDir = '$sigModuleDir',
-  backGroundGenesFile = '$goFile',
-  summaryRoot = oraSummaryDir,
-  reportRoot = 'GO_reports/'
+    sigModuleDir = '$sigModuleDir',
+    backGroundGenesFile = '$goFile',
+    summaryRoot = oraSummaryDir,
+    reportRoot = 'GO_reports/'
 )
 
 METHOD = "ORA" # ORA | GSEA | NTA
@@ -47,7 +47,7 @@ for(fileName in list.files(INPUT_PATH)){
     name <- ""
     if(grepl("sig_", fileName)){
         ## get name of input file
-        name <- tools::file_path_sans_ext(fileName) 
+        name <- tools::file_path_sans_ext(fileName)
         tf_method = paste0(name, '_', METHOD)
         tryCatch(
             # perform enrichment analysis
@@ -70,30 +70,30 @@ for(fileName in list.files(INPUT_PATH)){
                 print(paste0("ERROR while running WebGestalt for ",tf_method))
                 enrich_df = NULL
             }
-        )    
+        )
     }else{
-        name <- tools::file_path_sans_ext(fileName) 
+        name <- tools::file_path_sans_ext(fileName)
     }
     # save summary as a .csv file
     if (!is.null(enrich_df)) {
-      # remove link column
-      sig_df <- subset(enrich_df, select = -c(link))
-      # affinity propagation 
-      idsInSet <- sapply(sig_df\$overlapId, strsplit, split=";")
-      names(idsInSet) <- sig_df\$geneSet
-      minusLogP <- -log(sig_df\$pValue)
-      minusLogP[minusLogP == Inf] <- -log(.Machine\$double.eps)
-      apRes <- affinityPropagation(idsInSet, minusLogP)
-      # subset GO terms for exemplar terms
-      apGO_full <- sig_df[sig_df\$geneSet %in% apRes\$representatives,]
-      if (nrow(apGO_full) > 0) {
-          apGO_full['database'] <- rep(DATABASE, nrow(apGO_full))
-          write.csv(apGO_full,file.path(SUMMARIES_PATH,paste0(name,".csv")),row.names = FALSE)
-      } else {
-          print("NO SIGNIFICANT OVERLAPS")
-          write.csv(NULL,file.path(SUMMARIES_PATH,paste0(name,".csv")),row.names = FALSE)
-      }
-    } 
+        # remove link column
+        sig_df <- subset(enrich_df, select = -c(link))
+        # affinity propagation
+        idsInSet <- sapply(sig_df\$overlapId, strsplit, split=";")
+        names(idsInSet) <- sig_df\$geneSet
+        minusLogP <- -log(sig_df\$pValue)
+        minusLogP[minusLogP == Inf] <- -log(.Machine\$double.eps)
+        apRes <- affinityPropagation(idsInSet, minusLogP)
+        # subset GO terms for exemplar terms
+        apGO_full <- sig_df[sig_df\$geneSet %in% apRes\$representatives,]
+        if (nrow(apGO_full) > 0) {
+            apGO_full['database'] <- rep(DATABASE, nrow(apGO_full))
+            write.csv(apGO_full,file.path(SUMMARIES_PATH,paste0(name,".csv")),row.names = FALSE)
+        } else {
+            print("NO SIGNIFICANT OVERLAPS")
+            write.csv(NULL,file.path(SUMMARIES_PATH,paste0(name,".csv")),row.names = FALSE)
+        }
+    }
     else {
         print("NO SIGNIFICANT OVERLAPS")
         write.csv(NULL,file.path(SUMMARIES_PATH,paste0(name,".csv")),row.names = FALSE)
@@ -108,9 +108,9 @@ r.version <- strsplit(version[['version.string']], ' ')[[1]][3]
 webgestalt.version <- as.character(packageVersion('WebGestaltR'))
 
 writeLines(
-  c(
-    '"${task.process}":',
-    paste('    r-base:', r.version),
-    paste('    webgestalt:', webgestalt.version)
-  ),
+    c(
+        '"${task.process}":',
+        paste('    r-base:', r.version),
+        paste('    webgestalt:', webgestalt.version)
+    ),
 'versions.yml')

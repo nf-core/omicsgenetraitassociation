@@ -14,14 +14,14 @@ def main():
     moduleFile = '$moduleFile'
     outputPath = 'pascalOutput/'
 
-    print(scoreFile) 
+    print(scoreFile)
     print(moduleFile)
     print(outputPath)
     # Check if the output directory exists, if not create it
     if not os.path.exists(outputPath):
         print("creating outputPath")
         os.makedirs(outputPath)
-    
+
     #for moduleFile, scoreFile in zip(moduleFiles, scoreFiles):
     Scorer = genescorer.chi2sum()
     Scorer.load_scores(scoreFile)
@@ -37,9 +37,9 @@ def print_versions():
     import sys
     import PascalX
     with open("versions.yml", "w") as file:
-      file.write('"${task.process}"\\n')
-      file.write(f'  python: {sys.version}\\n')
-      file.write(f'  PascalX: {PascalX.__version__}\\n')
+        file.write('"${task.process}"\\n')
+        file.write(f'  python: {sys.version}\\n')
+        file.write(f'  PascalX: {PascalX.__version__}\\n')
 
 
 if __name__ == "__main__":

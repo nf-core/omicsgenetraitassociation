@@ -2,7 +2,7 @@ process MMAP {
 
     label 'process_low'
 
-    container 'docker://jungwooseok/mmap:1.0.2'
+    container 'jungwooseok/mmap:1.0.2'
 
     input:
     val gene
@@ -30,13 +30,13 @@ process MMAP {
     covariates=" $gene "
 
     \$mmap \\
-      --ped "${pedigree_file}" \\
-      --trait ${trait} \\
-      --covariates \$covariates \\
-      --phenotype_filename "${phenotype_file}" \\
-      --read_binary_covariance_file "${covariance_matrix_file}" \\
-      --single_pedigree \\
-      --file_suffix "kinship_${gene}"
+        --ped "${pedigree_file}" \\
+        --trait ${trait} \\
+        --covariates \$covariates \\
+        --phenotype_filename "${phenotype_file}" \\
+        --read_binary_covariance_file "${covariance_matrix_file}" \\
+        --single_pedigree \\
+        --file_suffix "kinship_${gene}"
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

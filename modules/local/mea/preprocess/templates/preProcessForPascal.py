@@ -6,7 +6,7 @@ import sys
 
 def extractGeneSetFromModuleFile(MODULEPATH:str):
     """
-    Read a module file and extract a set of genes in the file. 
+    Read a module file and extract a set of genes in the file.
     It assumes the input file is tsv format where the gene name starts to appear from the thrid column
 
     Args:
@@ -43,25 +43,25 @@ def pairwiseProcessGeneScoreAndModule(GSPATH: str, MODULEPATH: str, OUTPUTPATH: 
     Returns:
         None. The processed gene score file, processed module file, and the GO background set file are saved to the corresponding directories.
     """
-    
+
     # Read the gene score file
-    df_gs = pd.read_csv(GSPATH, sep=sep) 
+    df_gs = pd.read_csv(GSPATH, sep=sep)
     genesWithScore = set(df_gs[geneNameCol])
     genesInModule = extractGeneSetFromModuleFile(MODULEPATH)
     intersectingGenes = genesWithScore.intersection(genesInModule)
-    
+
     moduleFileName = MODULEPATH.split("/")[-1]
     # Output processed gene score file to be used for PASCAL
     with open(os.path.join(OUTPUTPATH, f"GS_{pipeline}_{trait}_{moduleFileName[:-4]}.tsv"), "w") as f:
         for index, row in df_gs.iterrows():
             f.write(f"{row[geneNameCol]}\\t{str(row[pvalCol])}\\n")
-    
+
     # Output GO background set file
     with open(os.path.join(OUTPUTPATH, f"GO_{pipeline}_{trait}_{moduleFileName[:-4]}.txt"), "w") as f:
         for index, row in df_gs.iterrows():
             if row[geneNameCol] in intersectingGenes:
                 f.write(f"{row[geneNameCol]}\\n")
-    
+
     # Output processed module file after intersecting with the gene score file
     with open(os.path.join(OUTPUTPATH, f"Module_{pipeline}_{trait}_{moduleFileName[:-4]}.tsv"), "w") as f:
         with open(MODULEPATH, "r") as g:
@@ -84,7 +84,7 @@ def write_versions_file():
         f.write(f'    pandas: "{pd.__version__}"\\n')
 
 def main():
-    
+
     # parse nextflow process input variables
     scoreFile = '$gene_score_file'
     moduleFileDir = '$module_file_dir'
@@ -100,10 +100,10 @@ def main():
     # Check if the output directory exists, if not create it
     if not os.path.exists(outputPath):
         os.makedirs(outputPath)
-        
+
         filePath = moduleFileDir
         pairwiseProcessGeneScoreAndModule(scoreFile, filePath, outputPath, pipelineName, traitName, geneColName, pvalColName)
-        
-    
+
+
 if __name__ == "__main__":
     main()

@@ -1,9 +1,10 @@
-name: mmap_parse
+name: postprocess
 channels:
     - conda-forge
     - bioconda
     - defaults
 dependencies:
     - python=3.8.3
-    - numpy=1.19.5
-    - pandas=1.1.5
+    - pandas=2.2.0
+    - numpy=1.26.3
+    - statsmodels=0.14.1

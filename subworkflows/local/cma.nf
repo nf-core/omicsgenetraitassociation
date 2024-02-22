@@ -1,12 +1,12 @@
 //
-// test CMA 
+// test CMA
 //
 
 include { CMA } from '../../modules/local/cma/cma'
 
 workflow CMA_SUBWORKFLOW {
     take:
-    input_files     
+    input_files
     trait
     category
 
@@ -17,24 +17,24 @@ workflow CMA_SUBWORKFLOW {
     ch_tetrachor = Channel.empty()
 
     if (params.cma_test) {
-      input_files = Channel.fromPath("${params.cma_two_traits}/*.csv").toList()
+        input_files = Channel.fromPath("${params.cma_two_traits}/*.csv").toList()
     }
 
     // CMA
     CMA (
-      input_files,
-      trait,
-      category
+        input_files,
+        trait,
+        category
     )
 
     ch_pval = CMA.out.pval
     ch_tetrachor = CMA.out.tetrachor
     ch_versions = ch_versions.mix(CMA.out.versions)
 
-    
+
 
     emit:
     pval = ch_pval
     tetrachor = ch_tetrachor
-    versions = ch_versions 
+    versions = ch_versions
 }

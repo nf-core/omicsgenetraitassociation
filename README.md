@@ -1,5 +1,9 @@
-# ![nf-core/omicsgenetraitassociation](docs/images/nf-core-omicsgenetraitassociation_logo_light.png#gh-light-mode-only) ![nf-core/omicsgenetraitassociation](docs/images/nf-core-omicsgenetraitassociation_logo_dark.png#gh-dark-mode-only)
-
+<h1>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/nf-core-omicsgenetraitassociation_logo_dark.png">
+    <img alt="nf-core/omicsgenetraitassociation" src="docs/images/nf-core-omicsgenetraitassociation_logo_light.png">
+  </picture>
+</h1>
 [![GitHub Actions CI Status](https://github.com/nf-core/omicsgenetraitassociation/workflows/nf-core%20CI/badge.svg)](https://github.com/nf-core/omicsgenetraitassociation/actions?query=workflow%3A%22nf-core+CI%22)
 [![GitHub Actions Linting Status](https://github.com/nf-core/omicsgenetraitassociation/workflows/nf-core%20linting/badge.svg)](https://github.com/nf-core/omicsgenetraitassociation/actions?query=workflow%3A%22nf-core+linting%22)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/omicsgenetraitassociation/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 
@@ -13,51 +17,40 @@
 
 ## Introduction
 
-**nf-core/omicsgenetraitassociation** is a bioinformatics pipeline that ...
+**nf-core/omicsgenetraitassociation** is a bioinformatics pipeline that can be used to perform meta-analysis of trait associations accounting for correlations across omics studies due to hidden non-independencies between study elements which may arise from overlapping or related samples. It takes a samplesheet with input omic association data, performs gene-level aggregation, correlated meta-analysis, and produces a report on downstream module enrichment and gene ontology enrichment analyses.
 
-<!-- TODO nf-core:
-   Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
-   major pipeline sections and the types of output it produces. You're giving an overview to someone new
-   to nf-core here, in 15-20 seconds. For an example, see https://github.com/nf-core/rnaseq/blob/master/README.md#introduction
--->
+![nf-core/omicsgenetraitassociation metro map](docs/images/nf-core-omicgenetraitassociation_metro_map.png)
 
-<!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
-     workflows use the "tube map" design for that. See https://nf-co.re/docs/contributing/design_guidelines#examples for examples.   -->
-<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
-
-1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
-2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+1. Gene-level aggregation of GWAS summary statistics [`PASCAL`](https://github.com/BergmannLab/PascalX)
+2. Gene-trait association [`MMAP`](https://mmap.github.io/)
+3. Correlated meta-analysis [`corrmeta`](https://github.com/wsjung/corrmeta) <!-- update link when on bioconductor -->
+4. Module enrichment analysis [`MEA`](https://github.com/BergmannLab/PascalX)
+5. Gene ontology (GO) enrichment analysis [`GO`](https://cran.r-project.org/web/packages/WebGestaltR/index.html)
 
 ## Usage
 
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
-<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
-     Explain what rows and columns represent. For instance (please edit as appropriate):
-
 First, prepare a samplesheet with your input data that looks as follows:
 
 `samplesheet.csv`:
 
-```csv
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
+```csv title="samplesheet.csv"
+sample,trait,pascal,twas,additional_sources
+llfs_fhshdl,fhshdl,data/llfs/fhshdl/gwas.csv,data/llfs/fhshdl/twas.csv,data/llfs/additional_sources.txt
+fhs_lnTG,lnTG,data/fhs/lnTG/gwas.csv,data/fhs/lnTG/twas.csv,
 ```
 
-Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
-
--->
+Each row represents a single correlated meta-analysis run. `pascal` is the GWAS summary statistics to be aggreagted to the gene-level. `twas` is the gene-trait association phenotype file (please refer to [usage.md](docs/usage.md) for details). `additional_sources` lists paths to additional omic association p-values.
 
 Now, you can run the pipeline using:
 
-<!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
-
 ```bash
 nextflow run nf-core/omicsgenetraitassociation \
-   -profile <docker/singularity/.../institute> \
-   --input samplesheet.csv \
-   --outdir <OUTDIR>
+  -profile <docker/singularity/.../institute> \
+  --input samplesheet.csv \
+  --outdir <OUTDIR>
 ```
 
 > [!WARNING]
@@ -74,11 +67,16 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-nf-core/omicsgenetraitassociation was originally written by .
+nf-core/omicsgenetraitassociation was originally written by Woo Jung ([@wsjung](https://github.com/wsjung)). <!-- TODO wsjung: include DOI to CMA paper when published -->
 
-We thank the following people for their extensive assistance in the development of this pipeline:
+Many thanks to others who have written parts of the pipeline or helped out along the way too, including (but not limited to):
 
-<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
+-   [Chase Mateusiak](https://github.com/cmatKhan)
+-   [Sandeep Acharya](https://github.com/sandeepacharya464)
+-   [Edward Kang](https://github.com/edwardkang0925)
+-   Lisa Liao
+-   Michael Brent
+-   Michael Province
 
 ## Contributions and Support
 
@@ -90,8 +88,6 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
 <!-- If you use nf-core/omicsgenetraitassociation for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
-
-<!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
